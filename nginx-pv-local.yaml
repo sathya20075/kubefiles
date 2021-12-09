@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: nfs-pv-local
+  namespace: dev
+spec:
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany
+  local:
+    path: /opt/local-data
+  capacity:
+    storage: 500Mi
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+        matchExpressions:
+          - key: Size
+            operator: In
+            values:
+              - Large
+              - Medium
+
+  persistentVolumeReclaimPolicy: Retain
+

@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nginx-deployment
+  name: nginx-deployment
+  namespace: test
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: nginx-pod
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx-pod
+    spec:
+      containers:
+      - image: nginx
+        name: nginx-app
+        volumeMounts:
+          - name: buildspace
+            mountPath: /var/tmp/containerdata      
+      volumes:
+        - name: buildspace
+          hostPath:
+            path: /var/tmp/hostdir

@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nginx-deployment
+  name: nginx-deployment
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: nginx-pod
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx-pod
+    spec:
+      containers:
+      - image: nginx
+        name: nginx-app
+        volumeMounts:
+          - name: buildspace
+            mountPath: /mnt/nfs_client_share      
+      volumes:
+        - name: buildspace
+          persistentVolumeClaim:
+            claimName: nginx-nfs-pvc

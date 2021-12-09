@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-service-nodeport
+  namespace: test
+spec:
+  ports:
+  - port: 8080
+    targetPort: 80
+    nodePort: 30080
+  type: NodePort
+  selector:
+    app: nginx-pod
