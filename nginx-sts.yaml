@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  labels:
+    app: nginx-sts
+  name: nginx-sts
+spec:
+  serviceName: nginx-sts-headless-svc
+  replicas: 3
+  selector:
+    matchLabels:
+      app: nginx-sts
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: nginx-sts
+    spec:
+      containers:
+      - image: nginx
+        imagePullPolicy: Always
+        name: nginx
+        volumeMounts:
+        - name: nginx-sts-pvc
+          mountPath: /data
+  volumeClaimTemplates:
+  - metadata:
+      name: nginx-sts-pvc
+    spec:
+      storageClassName: nfs-client
+      accessModes:
+       - ReadWriteMany
+      resources:
+         requests:
+           storage: 2Mi
+
