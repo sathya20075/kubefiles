@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: nginx-blue
+  name: nginx-deploy-blue
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-blue
+  template:
+    metadata:
+      labels:
+        app: nginx-blue
+    spec:
+      volumes:
+      - name: webdata
+        emptyDir: {}
+      initContainers:
+      - name: web-content
+        image: busybox
+        command: ["/bin/sh","-c",'echo "<h1>Iam <font color=blue>BLUE</font></h1>" > /webdata/index.html']
+        volumeMounts:
+        - name: webdata
+          mountPath: "/webdata"
+      containers:
+      - image: nginx
+        name: nginx
+        volumeMounts:
+        - name: webdata
+          mountPath: "/usr/share/nginx/html"
